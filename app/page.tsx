@@ -24,7 +24,7 @@ export default async function Home() {
           <div className="mt-8 flex justify-center gap-4">
             <div className="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition">
               {user ? (
-                <NextLink href={`/dashboard/${user.id}`}>Dashboard</NextLink>
+                <NextLink href={`/dashboard`}>Dashboard</NextLink>
               ) : (
                 <NextLink href="/login">Login</NextLink>
               )}

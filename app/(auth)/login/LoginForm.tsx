@@ -34,8 +34,7 @@ export default function LoginForm() {
   async function onSubmit(formData: LoginSchema) {
     const result = await signInUser(formData);
     if (result.status === 'success') {
-      const session = await getServerSession();
-      router.push(`/dashboard/${session?.user.id}`);
+      router.push(`/dashboard`);
       toast.success('Login success');
     } else {
       toast.error(result.error as string);
@@ -67,6 +66,7 @@ export default function LoginForm() {
             color="primary"
             labelPlacement="inside"
             required
+            autoComplete="email"
             isInvalid={!!errors.email}
             errorMessage={errors.email?.message as string}
           />
@@ -77,6 +77,7 @@ export default function LoginForm() {
             color="primary"
             labelPlacement="inside"
             required
+            autoComplete="current-password"
             isInvalid={!!errors.password}
             errorMessage={errors.password?.message as string}
             type={isVisible ? 'text' : 'password'}

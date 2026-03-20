@@ -15,7 +15,7 @@ export default async function TopNav() {
 
   return (
     <Navbar
-      maxWidth="2xl"
+      maxWidth="full"
       className="bg-linear-to-r from-teal-600 to-teal-900 text-gray-100 h-16"
       isBordered
       classNames={{
@@ -23,7 +23,7 @@ export default async function TopNav() {
           'text-xl',
           'font-semibold',
           'uppercase',
-          'data-[active=true]:text-gray-900',
+          'data-[active=true]:text-gray-800',
         ],
       }}
     >
@@ -36,7 +36,7 @@ export default async function TopNav() {
       <NavbarContent justify="center" className="hidden sm:flex">
         {user ? (
           <>
-            <NavLink label="Dashboard" href={`/dashboard/${user?.id}`} />
+            <NavLink label="Dashboard" href={`/dashboard`} />
             <NavLink label="Tasks" href={`/tasks`} />
             <NavLink label="Workers" href={`/workers`} />
             <NavLink label="Schedule" href={`/schedule`} />

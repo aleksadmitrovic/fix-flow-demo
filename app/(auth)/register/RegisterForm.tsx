@@ -40,7 +40,7 @@ export default function RegisterForm() {
       router.push('/login');
       toast.success('Registration successful. You can now log in.');
     } else {
-      toast.error('Something went wrong. Please try again.');
+      toast.error(result.error as string);
     }
   }
 
@@ -80,6 +80,7 @@ export default function RegisterForm() {
             color="primary"
             labelPlacement="inside"
             required
+            autoComplete="email"
             isInvalid={!!errors.email}
             errorMessage={errors.email?.message as string}
           />
@@ -90,6 +91,7 @@ export default function RegisterForm() {
             color="primary"
             labelPlacement="inside"
             required
+            autoComplete="current-password"
             isInvalid={!!errors.password}
             errorMessage={errors.password?.message as string}
             type={isVisible ? 'text' : 'password'}
@@ -115,6 +117,7 @@ export default function RegisterForm() {
             color="primary"
             labelPlacement="inside"
             required
+            autoComplete="current-password"
             isInvalid={!!errors.passwordConfirm}
             errorMessage={errors.passwordConfirm?.message as string}
             type={isVisible ? 'text' : 'password'}

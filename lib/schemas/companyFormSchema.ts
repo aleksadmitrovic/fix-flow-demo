@@ -1,0 +1,9 @@
+import z from 'zod';
+
+export const createCompanySchema = z.object({
+  name: z.string().min(3, {
+    message: 'Name must be at least 3 characters,',
+  }),
+});
+
+export type CreateCompanySchema = z.infer<typeof createCompanySchema>;
