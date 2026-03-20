@@ -3,7 +3,7 @@ import EmptyDashboard from './EmptyDashboard';
 import { getOwnedCompanyOfCurrentUser } from '../actions/companyActions';
 import { redirect } from 'next/navigation';
 import { getCurrentUserCompanyRole } from '../actions/authActions';
-import { UserCompanyRole } from '@/types';
+import { getDashboardRedirect } from '@/lib/services/dashboard';
 
 export default async function DashboardPage() {
   const [userRoleResult, ownedCompanyResult] = await Promise.all([
@@ -13,17 +13,6 @@ export default async function DashboardPage() {
 
   if (ownedCompanyResult.status === 'success') {
     return redirect(`dashboard/${ownedCompanyResult.data.id}`);
-  }
-
-  function getDashboardRedirect(user: UserCompanyRole) {
-    switch (user.role) {
-      case 'CLIENT':
-        return `/dashboard/${user.companyId}/tickets/${user.id}`;
-      case 'TEHNICIAN':
-        return `/dashboard/${user.companyId}/tickets`;
-      default:
-        return null;
-    }
   }
 
   if (userRoleResult.status === 'success') {
