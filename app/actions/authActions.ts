@@ -1,13 +1,12 @@
 'use server';
 import { auth } from '@/lib/auth';
-import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';
 import { loginSchema, LoginSchema } from '@/lib/schemas/loginFormSchema';
 import {
   registerSchema,
   RegisterSchema,
 } from '@/lib/schemas/registerFormSchema';
-import { ActionResult, UserCompanyRole } from '@/types';
+import { ActionResult } from '@/types';
 import { User } from 'better-auth';
 import { isAPIError } from 'better-auth/api';
 import { headers } from 'next/headers';
@@ -21,14 +20,14 @@ export async function signInUser(data: LoginSchema) {
 
   const { email, password } = validated.data;
   try {
-    await auth.api.signInEmail({
+    const data = await auth.api.signInEmail({
       body: {
         email,
         password,
       },
     });
 
-    return { status: 'success', message: 'Login Succesfully' };
+    return { status: 'success', message: 'Login Succesfully', data: data.user };
   } catch (error) {
     if (isAPIError(error)) {
       return { status: 'error', error: error.message };
@@ -89,33 +88,4 @@ export async function registerUser(
 export async function getServerSession() {
   const session = await auth.api.getSession({ headers: await headers() });
   return session;
-}
-
-export async function getCurrentUserCompanyRole(): Promise<
-  ActionResult<UserCompanyRole>
-> {
-  const session = await getServerSession();
-  if (!session) {
-    return { status: 'error', error: 'User is not found' };
-  }
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-      select: {
-        id: true,
-        companyId: true,
-        role: true,
-      },
-    });
-
-    if (!user) return { status: 'error', error: 'User not found' };
-
-    return { status: 'success', data: user };
-  } catch (error) {
-    console.error(error);
-    return { status: 'error', error: 'Something went wrong' };
-  }
 }

@@ -10,7 +10,8 @@ datasource db {
 enum Role {
   ADMIN
   CLIENT
-  TEHNICIAN
+  TECHNICIAN
+  PENDING
 }
 
 enum TicketStatus {
@@ -35,10 +36,9 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  role          Role?
-  company       Company?  @relation(fields: [companyId], references: [id])
-  companyId     String?
-  ownedCompany  Company?  @relation("CompanyOwner")
+
+  memberships Membership[]
+  workspaces  Workspace[]
 
   @@unique([email])
   @@map("user")
@@ -92,15 +92,56 @@ model Verification {
   @@map("verification")
 }
 
-model Company {
+model Workspace {
   id        String   @id @default(cuid())
   name      String
   joinCode  String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  users     User[]
-  ownerId   String   @unique
-  owner     User     @relation("CompanyOwner", fields: [ownerId], references: [id])
 
-  @@map("company")
+  ownerId     String
+  owner       User         @relation(fields: [ownerId], references: [id])
+  memberships Membership[]
+  tickets     Ticket[]
+
+  @@map("workspace")
+}
+
+model Membership {
+  id          String   @id @default(cuid())
+  userId      String
+  workspaceId String
+  role        Role     @default(PENDING)
+  createdAt   DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  tickets         Ticket[]
+  assignedTickets Ticket[] @relation("AssignedTickets")
+
+  @@unique([userId, workspaceId])
+  @@map("membership")
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  priority    Priority
+  status      TicketStatus
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   Membership @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  assignedToId String?
+  assignedTo   Membership? @relation("AssignedTickets", fields: [assignedToId], references: [id], onDelete: Cascade)
+
+  scheduleAt  DateTime?
+  completedAt DateTime?
+
+  @@map("ticket")
 }

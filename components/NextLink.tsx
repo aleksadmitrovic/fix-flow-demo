@@ -6,12 +6,14 @@ import { ReactNode } from 'react';
 const NextLink = ({
   href,
   children,
+  className,
   ...props
 }: {
+  className?: string;
   href: string;
   children: ReactNode;
 }) => (
-  <Link href={href} {...props}>
+  <Link href={href} className={className} {...props}>
     {children}
   </Link>
 );

@@ -10,34 +10,33 @@ import {
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { ModalProps } from '@/types';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CompanyJoinSchema,
-  companyJoinSchema,
-} from '@/lib/schemas/companyJoinFormSchema';
-import { Radio, RadioGroup } from '@heroui/radio';
-import { joinUserToCompany } from '../actions/companyActions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import {
+  workspaceJoinSchema,
+  WorkspaceJoinSchema,
+} from '@/lib/schemas/workspace/workspaceJoin';
+import { joinWorkspace } from '@/app/actions/workspaceActions';
 
 export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
   const router = useRouter();
   const {
     register,
     handleSubmit,
-    control,
     formState: { isSubmitting, errors },
-  } = useForm<CompanyJoinSchema>({
-    resolver: zodResolver(companyJoinSchema),
+  } = useForm<WorkspaceJoinSchema>({
+    resolver: zodResolver(workspaceJoinSchema),
     mode: 'onTouched',
   });
 
-  async function onSubmit(formData: CompanyJoinSchema) {
-    const result = await joinUserToCompany(formData);
+  async function onSubmit(formData: WorkspaceJoinSchema) {
+    console.log(formData);
+    const result = await joinWorkspace(formData);
     if (result.status === 'success') {
       toast.success('Successfully joined the Company');
-      router.push(`/dashboard`);
+      router.push(`/workspace/${result.data}`);
     } else {
       toast.error(result.error as string);
     }
@@ -64,22 +63,6 @@ export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
                   variant="bordered"
                   isInvalid={!!errors.joinCode}
                   errorMessage={errors.joinCode?.message as string}
-                />
-                <Controller
-                  name="role"
-                  control={control}
-                  defaultValue="CLIENT"
-                  render={({ field }) => (
-                    <RadioGroup
-                      label="Join as"
-                      orientation="horizontal"
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
-                      <Radio value="CLIENT">Client</Radio>
-                      <Radio value="TEHNICIAN">Tehnician</Radio>
-                    </RadioGroup>
-                  )}
                 />
               </form>
             </ModalBody>

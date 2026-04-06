@@ -11,14 +11,14 @@ import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { ModalProps } from '@/types';
 import { useForm } from 'react-hook-form';
-import {
-  CreateCompanySchema,
-  createCompanySchema,
-} from '@/lib/schemas/companyFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import createCompany from '../actions/companyActions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import {
+  workspaceCreateSchema,
+  WorkspaceCreateSchema,
+} from '@/lib/schemas/workspace/workspaceCreate';
+import { createWorkspace } from '@/app/actions/workspaceActions';
 
 export default function CreateCompanyModal({
   isOpen,
@@ -28,17 +28,17 @@ export default function CreateCompanyModal({
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<CreateCompanySchema>({
-    resolver: zodResolver(createCompanySchema),
+  } = useForm<WorkspaceCreateSchema>({
+    resolver: zodResolver(workspaceCreateSchema),
     mode: 'onTouched',
   });
   const router = useRouter();
 
-  async function onSubmit(data: CreateCompanySchema) {
-    const result = await createCompany(data);
+  async function onSubmit(data: WorkspaceCreateSchema) {
+    const result = await createWorkspace(data);
     if (result.status === 'success') {
       toast.success('Company created successfully');
-      router.push(`/dashboard/${result.data.id}`);
+      router.push(`/workspace/${result.data.id}`);
     } else {
       toast.error('Failed to create company');
     }
@@ -50,7 +50,7 @@ export default function CreateCompanyModal({
         {(onClose) => (
           <>
             <ModalHeader className="flex justify-center bg-teal-800 text-gray-100">
-              <p>Create Your Company</p>
+              <p>Create Your Workspace</p>
             </ModalHeader>
             <ModalBody>
               <form

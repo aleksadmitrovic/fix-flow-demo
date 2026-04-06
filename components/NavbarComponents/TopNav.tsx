@@ -21,9 +21,11 @@ export default async function TopNav() {
       classNames={{
         item: [
           'text-xl',
-          'font-semibold',
+          'font-medium',
           'uppercase',
-          'data-[active=true]:text-gray-800',
+          'data-[active=true]:text-white',
+          'data-[active=true]:border-b-2',
+          'data-[active=true]:border-white',
         ],
       }}
     >
@@ -34,15 +36,7 @@ export default async function TopNav() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="center" className="hidden sm:flex">
-        {user ? (
-          <>
-            <NavLink label="Dashboard" href={`/dashboard`} />
-            <NavLink label="Tasks" href={`/tasks`} />
-            <NavLink label="Workers" href={`/workers`} />
-            <NavLink label="Schedule" href={`/schedule`} />
-            <NavLink label="Activity" href={`/activity`} />
-          </>
-        ) : null}
+        {user && <NavLink label="Workspaces" href={`/workspace`} />}
       </NavbarContent>
       <NavbarContent justify="end" className="hidden sm:flex">
         {!user ? (

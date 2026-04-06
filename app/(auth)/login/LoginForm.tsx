@@ -13,7 +13,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginFormSchema';
-import { getServerSession, signInUser } from '@/app/actions/authActions';
+import { signInUser } from '@/app/actions/authActions';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
@@ -34,7 +34,7 @@ export default function LoginForm() {
   async function onSubmit(formData: LoginSchema) {
     const result = await signInUser(formData);
     if (result.status === 'success') {
-      router.push(`/dashboard`);
+      router.push(`/workspace`);
       toast.success('Login success');
     } else {
       toast.error(result.error as string);
