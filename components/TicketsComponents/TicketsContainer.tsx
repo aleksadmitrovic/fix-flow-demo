@@ -14,10 +14,7 @@ import {
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { Select, SelectItem } from '@heroui/select';
 import CreateTicketModal from './CreateTicketModal';
-import { GoSearch } from 'react-icons/go';
 import AssignTicketModal from './AssignTicketModal';
 
 type TicketTableProps = {
@@ -136,34 +133,6 @@ export default function TicketsContainer({
       />
       <div className="flex flex-col gap-4 p-4">
         <div className="flex justify-between gap-3 items-end">
-          {/* <Input
-            isClearable
-            classNames={{
-              base: 'max-w-xs',
-              inputWrapper: 'border-1',
-            }}
-            placeholder="TODO..."
-            size="sm"
-            startContent={<GoSearch className="text-default-300" />}
-            variant="bordered"
-          />
-          <Select
-            size="sm"
-            className="max-w-xs"
-            label="Status:"
-            labelPlacement="outside-left"
-          >
-            <SelectItem>TODO</SelectItem>
-          </Select>
-          <Select
-            size="sm"
-            className="max-w-xs"
-            label="Prioirty:"
-            labelPlacement="outside-left"
-          >
-            <SelectItem>TODO</SelectItem>
-          </Select> */}
-
           <Button
             hidden={!permissions.canCreate}
             color="primary"

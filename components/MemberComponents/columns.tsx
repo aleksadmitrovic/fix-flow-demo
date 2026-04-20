@@ -1,16 +1,27 @@
 import { MembershipUserDto } from '@/types';
 
-export const columns = [
+export type ColumnKey = keyof MembershipUserDto | 'actions';
+
+export type ColumnType = {
+  key: ColumnKey;
+  label: string;
+};
+
+export const columns: ColumnType[] = [
+  {
+    key: 'userName',
+    label: 'Name',
+  },
+  {
+    key: 'userEmail',
+    label: 'Email',
+  },
   {
     key: 'role',
-    label: 'Status',
+    label: 'Role',
   },
   {
-    accessorKey: 'userEmail',
-    header: 'Email',
-  },
-  {
-    accessorKey: 'userName',
-    header: 'Name',
+    key: 'actions',
+    label: 'Actions',
   },
 ];

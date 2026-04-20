@@ -17,38 +17,47 @@ import {
   TableRow,
 } from '@heroui/table';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useCallback, useState, useTransition } from 'react';
 import toast from 'react-hot-toast';
 import ConfirmationModal from '../ConfirmationModal';
+import { ColumnKey, columns } from './columns';
+import { ActionTooltip } from '../TicketsComponents/ActionTooltip';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
-interface MembersTableProps {
+type MembersTableProps = {
   members: MembershipUserDto[];
   totalPages: number;
   currentPage: number;
-}
+  isLoading: boolean;
+  handleRoleChange: (id: string, role: MemberAssignableRole) => void;
+  callRemoveMember: (id: string) => void;
+};
 
 export default function MembersTable({
   members,
   totalPages,
   currentPage,
+  callRemoveMember,
+  handleRoleChange,
+  isLoading,
 }: MembersTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isPending, startTransition] = useTransition();
-  const [selectedMember, setSelectedMember] = useState<string>();
+  // const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // const [isPending, startTransition] = useTransition();
+  // const [selectedMember, setSelectedMember] = useState<string>();
 
-  function handleRoleChange(memberId: string, role: MemberAssignableRole) {
-    startTransition(async () => {
-      const result = await updateMemberRole(memberId, role);
-      if (result.status === 'success') {
-        toast.success(`Successfully updated ${result.data} role`);
-        router.refresh();
-      } else {
-        toast.error(result.error as string);
-      }
-    });
-  }
+  // function handleRoleChange(memberId: string, role: MemberAssignableRole) {
+  //   startTransition(async () => {
+  //     const result = await updateMemberRole(memberId, role);
+  //     if (result.status === 'success') {
+  //       toast.success(`Successfully updated ${result.data} role`);
+  //       router.refresh();
+  //     } else {
+  //       toast.error(result.error as string);
+  //     }
+  //   });
+  // }
 
   function handlePageChange(page: number) {
     const params = new URLSearchParams(searchParams);
@@ -57,26 +66,74 @@ export default function MembersTable({
     router.push(`?${params.toString()}`);
   }
 
-  async function callRemoveMember(memberId: string) {
-    onOpenChange();
-    setSelectedMember(memberId);
-  }
+  // async function callRemoveMember(memberId: string) {
+  //   onOpen();
+  //   setSelectedMember(memberId);
+  // }
 
-  function handleRemoveMember() {
-    if (!selectedMember) {
-      return;
-    }
-    startTransition(async () => {
-      const result = await removeMemberFromWorkspace(selectedMember);
-      if (result.status === 'success') {
-        toast.success(`Successfully removed ${result.data}`);
-        onOpenChange();
-        router.refresh();
-      } else {
-        toast.error(result.error as string);
+  // const handleRemoveMember = useCallback(
+  //   (selectedMember: string) => {
+  //     startTransition(async () => {
+  //       const result = await removeMemberFromWorkspace(selectedMember);
+  //       if (result.status === 'success') {
+  //         toast.success(`Successfully removed ${result.data}`);
+  //         onOpenChange();
+  //         router.refresh();
+  //       } else {
+  //         toast.error(result.error as string);
+  //       }
+  //     });
+  //   },
+  //   [onOpenChange, router],
+  // );
+
+  const renderCell = useCallback(
+    (member: MembershipUserDto, columnKey: ColumnKey) => {
+      if (columnKey === 'actions') {
+        return (
+          <ActionTooltip
+            content="Delete ticket"
+            color="danger"
+            icon={<FaRegTrashAlt size={20} />}
+            onClick={() => callRemoveMember(member.id)}
+          />
+        );
       }
-    });
-  }
+
+      const cellValue = member[columnKey];
+      switch (columnKey) {
+        case 'role':
+          return (
+            <Select
+              aria-label="Role"
+              size="sm"
+              variant="faded"
+              color="primary"
+              selectedKeys={[member.role]}
+              onChange={(e) =>
+                handleRoleChange(
+                  member.id,
+                  e.target.value as MemberAssignableRole,
+                )
+              }
+            >
+              <SelectItem color="secondary" key="CLIENT">
+                Client
+              </SelectItem>
+              <SelectItem color="secondary" key="TECHNICIAN">
+                Technician
+              </SelectItem>
+              <SelectItem color="secondary" key="PENDING">
+                Pending
+              </SelectItem>
+            </Select>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [callRemoveMember, handleRoleChange],
+  );
 
   return (
     <div className="w-full overflow-x-auto p-10">
@@ -94,13 +151,21 @@ export default function MembersTable({
         }
       >
         <TableHeader>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Email</TableColumn>
-          <TableColumn>Role</TableColumn>
-          <TableColumn>Actions</TableColumn>
+          {columns.map((column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          ))}
         </TableHeader>
-        <TableBody emptyContent="No members yet" isLoading={isPending}>
-          {members.map((member) => (
+        <TableBody emptyContent="No members yet" isLoading={isLoading}>
+          {members.map((row) => (
+            <TableRow key={row.id}>
+              {(columnKey) => (
+                <TableCell>
+                  {renderCell(row, columnKey as keyof MembershipUserDto)}
+                </TableCell>
+              )}
+            </TableRow>
+          ))}
+          {/* {members.map((member) => (
             <TableRow key={member.userId} className="h-16">
               <TableCell>{member.userName}</TableCell>
 
@@ -147,15 +212,15 @@ export default function MembersTable({
                 </Button>
               </TableCell>
             </TableRow>
-          ))}
+          ))} */}
         </TableBody>
       </Table>
-      <ConfirmationModal
+      {/* <ConfirmationModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         body="Are you sure you want to remove member from workspace"
         onConfirm={handleRemoveMember}
-      />
+      /> */}
     </div>
   );
 }
