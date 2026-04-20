@@ -36,7 +36,8 @@ export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
     const result = await joinWorkspace(formData);
     if (result.status === 'success') {
       toast.success('Successfully joined the Company');
-      router.push(`/workspace/${result.data}`);
+      onOpenChange();
+      router.refresh();
     } else {
       toast.error(result.error as string);
     }

@@ -11,6 +11,7 @@ type ModalProps = {
   onOpenChange: () => void;
 };
 
+// MEMBERSHIP TYPES
 type MemberWithWorkspacePayload = Prisma.MembershipGetPayload<{
   select: {
     id: true;
@@ -55,6 +56,77 @@ export type MembershipUserDto = {
   userEmail: string;
 };
 
+export type MembershipRole = {
+  id: string;
+  role: Role;
+};
+
 const MEMBER_ROLES = ['CLIENT', 'TECHNICIAN', 'PENDING'] as const;
 
 type MemberAssignableRole = (typeof MEMBER_ROLES)[number];
+
+// TICKET TYPES
+type TicketWithMembershipPayload = Prisma.TicketGetPayload<{
+  select: {
+    id: true;
+    title: true;
+    description: true;
+    priority: true;
+    status: true;
+    createdBy: {
+      select: {
+        id: true;
+        role: true;
+        user: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
+    workspace: {
+      select: {
+        id: true;
+        name: true;
+      };
+    };
+    assignedTo: {
+      select: {
+        user: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
+    scheduleAt: true;
+    completedAt: true;
+    updatedAt: true;
+    createdAt: true;
+  };
+}>;
+
+export type TicketDto = {
+  id: string;
+  title: string;
+  description: string | null;
+  priority: Priority;
+  status: TicketStatus;
+  memberRole: Role;
+  createdBy: string;
+  workspaceName: string;
+  assignedTo?: string;
+  updatedAt: string;
+  createdAt: string;
+  scheduleAt: string | null;
+  completedAt: string | null;
+};
+
+type Permissions = {
+  canCreate: boolean;
+  canRead: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+  canAssign: boolean;
+  canReopen: boolean;
+};

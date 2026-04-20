@@ -16,7 +16,7 @@ export default async function TopNav() {
   return (
     <Navbar
       maxWidth="full"
-      className="bg-linear-to-r from-teal-600 to-teal-900 text-gray-100 h-16"
+      className="bg-linear-to-r from-teal-600 to-teal-900 h-16"
       isBordered
       classNames={{
         item: [

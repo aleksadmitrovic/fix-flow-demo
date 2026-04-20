@@ -82,19 +82,6 @@ export async function getWorkspacesForCurrentUser(): Promise<
   }
 }
 
-// export async function getAllWorkspacesByCurrentUser(): Promise<
-//   ActionResult<Workspace>
-// > {
-//   const session = await getServerSession();
-//   if (!session) {
-//     return { status: 'error', error: 'Unauthorized' };
-//   }
-
-//   const workspaces = await getAllWorkspacesByUserId(session.user.id);
-//   try {
-//   } catch (error) {}
-// }
-
 export async function createWorkspace(
   data: WorkspaceCreateSchema,
 ): Promise<ActionResult<Workspace>> {

@@ -2,7 +2,12 @@
 import prisma from '@/lib/prisma';
 import { getServerSession } from './authActions';
 import { mapMembershipToMembershipUserDto } from '@/lib/mappings';
-import { ActionResult, MembershipUserDto, MemberAssignableRole } from '@/types';
+import {
+  ActionResult,
+  MembershipUserDto,
+  MemberAssignableRole,
+  MembershipRole,
+} from '@/types';
 import { validateMemberRole } from '@/lib/util';
 
 export async function getWorkspaceMembersForOwner(
@@ -69,7 +74,7 @@ export async function checkIfMemberExist(memberId: string): Promise<boolean> {
     return !!existingMember;
   } catch (error) {
     console.error(`checkIfMemberExist error:`, error);
-    return false; // safe fallback
+    return false;
   }
 }
 
@@ -137,6 +142,40 @@ export async function removeMemberFromWorkspace(
     };
   } catch (error) {
     console.error('removeMemberFromWorkspace error:', error);
+    return { status: 'error', error: 'Something went wrong' };
+  }
+}
+
+export async function getCurrentMemberOnWorkspace(
+  workspaceId: string,
+): Promise<ActionResult<MembershipRole>> {
+  const session = await getServerSession();
+  if (!session?.user) {
+    return { status: 'error', error: 'Unauthorized' };
+  }
+
+  try {
+    const result = await prisma.membership.findFirst({
+      where: {
+        userId: session.user.id,
+        workspaceId,
+      },
+      select: {
+        id: true,
+        role: true,
+      },
+    });
+
+    if (!result) {
+      return {
+        status: 'error',
+        error: 'User doesnt have role on this workspace',
+      };
+    }
+
+    return { status: 'success', data: result };
+  } catch (error) {
+    console.error('getCurrentUserRole error:', error);
     return { status: 'error', error: 'Something went wrong' };
   }
 }

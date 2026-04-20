@@ -35,6 +35,7 @@ export default function LoginForm() {
     const result = await signInUser(formData);
     if (result.status === 'success') {
       router.push(`/workspace`);
+      router.refresh();
       toast.success('Login success');
     } else {
       toast.error(result.error as string);
