@@ -1,13 +1,11 @@
 'use server';
-import { Navbar, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button } from '@heroui/button';
-import AppLogo from '../AppLogo';
-import UserMenu from './UserMenu';
-import NavMobileContent from './NavMobileContent';
-import NavMobileMenu from './NavMobileMenu';
-import NextLink from '../NextLink';
+import { Navbar, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { getServerSession } from '@/app/actions/authActions';
+import AppLogo from '../AppLogo';
+import NextLink from '../NextLink';
 import NavLink from './NavLink';
+import UserMenu from './UserMenu';
 
 export default async function TopNav() {
   const session = await getServerSession();
@@ -29,16 +27,15 @@ export default async function TopNav() {
         ],
       }}
     >
-      <NavMobileContent />
-      <NavbarContent justify="start" className="hidden sm:flex">
+      <NavbarContent justify="start" className="flex">
         <NavbarItem as={NextLink} href="/">
           <AppLogo width={120} />
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent justify="center" className="hidden sm:flex">
+      <NavbarContent justify="center" className="flex">
         {user && <NavLink label="Workspaces" href={`/workspace`} />}
       </NavbarContent>
-      <NavbarContent justify="end" className="hidden sm:flex">
+      <NavbarContent justify="end" className="flex">
         {!user ? (
           <>
             <Button as={NextLink} href="/login" variant="solid" color="default">
@@ -56,7 +53,6 @@ export default async function TopNav() {
         ) : (
           <UserMenu user={user} />
         )}
-        <NavMobileMenu />
       </NavbarContent>
     </Navbar>
   );

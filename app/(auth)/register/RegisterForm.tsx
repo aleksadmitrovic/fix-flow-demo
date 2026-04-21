@@ -1,24 +1,27 @@
 'use client';
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
-import { Button } from '@heroui/button';
 import React, { useState } from 'react';
+
+import { Button } from '@heroui/button';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Input } from '@heroui/input';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+
 import AppLogo from '@/components/AppLogo';
 import {
   EyeFilledIcon,
   EyeSlashFilledIcon,
 } from '@/components/EyeSlashFilledIcon';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { registerUser } from '@/app/actions/authActions';
 import {
   RegisterSchema,
   registerSchema,
 } from '@/lib/schemas/registerFormSchema';
-import { registerUser } from '@/app/actions/authActions';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
 
 export default function RegisterForm() {
   const router = useRouter();

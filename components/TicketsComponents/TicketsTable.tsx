@@ -94,7 +94,7 @@ export default function TicketTable({
                 onClick={() => callDeleteTicket(ticket)}
               />
             )}
-            {canReopen && (
+            {canReopen && ticket.completedAt && (
               <ActionTooltip
                 content="Reopen ticket"
                 color="primary"

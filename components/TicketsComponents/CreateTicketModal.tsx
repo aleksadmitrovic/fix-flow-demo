@@ -1,5 +1,11 @@
 'use client';
 import React, { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { Button } from '@heroui/button';
+import { Input, Textarea } from '@heroui/input';
 import {
   Modal,
   ModalBody,
@@ -7,20 +13,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal';
-import { Button } from '@heroui/button';
-import { Input, Textarea } from '@heroui/input';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'react-hot-toast';
-import { useParams, useRouter } from 'next/navigation';
+import { getPriorities } from '@/lib/util';
 import {
   createTicketSchema,
   CreateTicketSchema,
 } from '@/lib/schemas/ticket/createTicketSchema';
-import { getPriorities } from '@/lib/util';
-import { ModalProps, TicketDto } from '@/types';
 import { createTicket, updateTicket } from '@/app/actions/ticketsActions';
-import { updateTicketSchema } from '@/lib/schemas/ticket/updateTicketSchema';
+import { ModalProps, TicketDto } from '@/types';
 
 type TicketModalProps = ModalProps & {
   selectedTicket: TicketDto | null;
@@ -94,8 +93,8 @@ export default function CreateTicketModal({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       classNames={{
-        wrapper: 'items-end items-center sm:justify-center', // bottom on mobile, center on desktop
-        base: 'mx-2 sm:mx-4', // spacing from edges
+        wrapper: 'items-end items-center sm:justify-center',
+        base: 'mx-2 sm:mx-4',
         closeButton: 'text-slate-100 hover:text-teal-700',
       }}
     >

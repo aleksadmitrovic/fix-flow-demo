@@ -1,21 +1,21 @@
 'use client';
 
 import React, { useState, useTransition } from 'react';
-import TicketsTable from './TicketsTable';
-import { ColumnType } from './columns';
-import { Permissions, TicketDto } from '@/types';
-import ConfirmationModal from '../ConfirmationModal';
 import { useDisclosure } from '@heroui/react';
+import { Button } from '@heroui/button';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 import {
   closeTicket,
   deleteTicket,
   reopenTicket,
 } from '@/app/actions/ticketsActions';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { Button } from '@heroui/button';
+import { Permissions, TicketDto } from '@/types';
+import TicketsTable from './TicketsTable';
 import CreateTicketModal from './CreateTicketModal';
 import AssignTicketModal from './AssignTicketModal';
+import ConfirmationModal from '../ConfirmationModal';
+import { ColumnType } from './columns';
 
 type TicketTableProps = {
   tickets: TicketDto[];

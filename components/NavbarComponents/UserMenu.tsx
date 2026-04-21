@@ -1,4 +1,7 @@
 'use client';
+import React from 'react';
+import { User } from 'better-auth';
+import { Avatar } from '@heroui/avatar';
 import {
   Dropdown,
   DropdownItem,
@@ -6,9 +9,6 @@ import {
   DropdownSection,
   DropdownTrigger,
 } from '@heroui/dropdown';
-import { Avatar } from '@heroui/avatar';
-import React from 'react';
-import { User } from 'better-auth';
 import { signOutUser } from '@/app/actions/authActions';
 
 export default function UserMenu({ user }: { user: User }) {

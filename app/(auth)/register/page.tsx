@@ -1,6 +1,6 @@
-import AppImage from '@/components/AppImage';
 import React from 'react';
 import RegisterForm from './RegisterForm';
+import AppImage from '@/components/AppImage';
 
 export default function RegisterPage() {
   return (

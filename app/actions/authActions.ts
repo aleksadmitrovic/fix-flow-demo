@@ -1,4 +1,8 @@
 'use server';
+import { User } from 'better-auth';
+import { isAPIError } from 'better-auth/api';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { loginSchema, LoginSchema } from '@/lib/schemas/loginFormSchema';
@@ -7,10 +11,6 @@ import {
   RegisterSchema,
 } from '@/lib/schemas/registerFormSchema';
 import { ActionResult } from '@/types';
-import { User } from 'better-auth';
-import { isAPIError } from 'better-auth/api';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 export async function signInUser(data: LoginSchema) {
   const validated = loginSchema.safeParse(data);

@@ -1,14 +1,14 @@
 'use server';
 import prisma from '@/lib/prisma';
-import { getServerSession } from './authActions';
 import { mapMembershipToMembershipUserDto } from '@/lib/mappings';
+import { validateMemberRole } from '@/lib/util';
 import {
   ActionResult,
   MembershipUserDto,
   MemberAssignableRole,
   MembershipRole,
 } from '@/types';
-import { validateMemberRole } from '@/lib/util';
+import { getServerSession } from './authActions';
 
 export async function getWorkspaceMembersForOwner(
   workspaceId: string,

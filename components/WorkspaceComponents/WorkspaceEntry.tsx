@@ -1,10 +1,10 @@
 'use client';
-import { Card, CardBody } from '@heroui/card';
-import { Button } from '@heroui/button';
 import React from 'react';
+import { useDisclosure } from '@heroui/react';
+import { Button } from '@heroui/button';
+import { Card, CardBody } from '@heroui/card';
 import { LuBuilding2 } from 'react-icons/lu';
 import { BiUser } from 'react-icons/bi';
-import { useDisclosure } from '@heroui/react';
 import CreateCompanyModal from './CreateWorkspaceModal';
 import JoinCompanyModal from './JoinWorkspaceModal';
 

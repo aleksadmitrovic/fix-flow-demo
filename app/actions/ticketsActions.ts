@@ -1,14 +1,11 @@
 'use server';
+import prisma from '@/lib/prisma';
 import { Ticket } from '@/lib/generated/prisma/client';
+import { mapTicketToTicketDto } from '@/lib/mappings';
 import {
   createTicketSchema,
   CreateTicketSchema,
 } from '@/lib/schemas/ticket/createTicketSchema';
-import { ActionResult, Permissions, TicketDto } from '@/types';
-import { getServerSession } from './authActions';
-import prisma from '@/lib/prisma';
-import { mapTicketToTicketDto } from '@/lib/mappings';
-import { getCurrentMemberOnWorkspace } from './membershipActions';
 import {
   updateTicketSchema,
   UpdateTicketSchema,
@@ -17,8 +14,10 @@ import {
   assignTicketSchema,
   AssignTicketSchema,
 } from '@/lib/schemas/ticket/assignTicketSchema';
+import { ActionResult, Permissions, TicketDto } from '@/types';
+import { getServerSession } from './authActions';
+import { getCurrentMemberOnWorkspace } from './membershipActions';
 import { canCloseTicket, canOpenTicket } from '../services/ticketService';
-import { success } from 'zod';
 
 export async function getTicketById(id: string): Promise<ActionResult<Ticket>> {
   try {

@@ -1,5 +1,11 @@
 'use client';
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
 import {
   Modal,
   ModalBody,
@@ -7,18 +13,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal';
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { ModalProps } from '@/types';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+
+import { createWorkspace } from '@/app/actions/workspaceActions';
 import {
   workspaceCreateSchema,
   WorkspaceCreateSchema,
 } from '@/lib/schemas/workspace/workspaceCreate';
-import { createWorkspace } from '@/app/actions/workspaceActions';
+import { ModalProps } from '@/types';
 
 export default function CreateCompanyModal({
   isOpen,

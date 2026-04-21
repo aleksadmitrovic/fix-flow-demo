@@ -1,18 +1,18 @@
 'use server';
-import { Workspace } from '@/lib/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { generateJoinCode } from '@/lib/util';
-import { ActionResult, MembershipWorkspaceDto } from '@/types';
-import { getServerSession } from './authActions';
+import { Workspace } from '@/lib/generated/prisma/client';
+import { mapMembershipToMembershipDto } from '@/lib/mappings';
 import {
   workspaceCreateSchema,
   WorkspaceCreateSchema,
 } from '@/lib/schemas/workspace/workspaceCreate';
-import { mapMembershipToMembershipDto } from '@/lib/mappings';
 import {
   workspaceJoinSchema,
   WorkspaceJoinSchema,
 } from '@/lib/schemas/workspace/workspaceJoin';
+import { generateJoinCode } from '@/lib/util';
+import { ActionResult, MembershipWorkspaceDto } from '@/types';
+import { getServerSession } from './authActions';
 
 async function createUniqueJoinCode(): Promise<string> {
   let code = '';

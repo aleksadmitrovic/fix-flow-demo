@@ -1,4 +1,11 @@
 'use client';
+import React from 'react';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { Button } from '@heroui/button';
 import {
   Modal,
   ModalBody,
@@ -6,18 +13,12 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Button } from '@heroui/button';
-import { useParams, useRouter } from 'next/navigation';
-import { ModalProps } from '@/types';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { assignToTicket } from '@/app/actions/ticketsActions';
 import {
   assignTicketSchema,
   AssignTicketSchema,
 } from '@/lib/schemas/ticket/assignTicketSchema';
-import { assignToTicket } from '@/app/actions/ticketsActions';
-import toast from 'react-hot-toast';
+import { ModalProps } from '@/types';
 
 type TicketModalProps = ModalProps & {
   ticketId: string;

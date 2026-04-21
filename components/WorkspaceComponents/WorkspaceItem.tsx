@@ -1,7 +1,7 @@
-import { Card } from '@heroui/card';
 import React from 'react';
-import NextLink from '../NextLink';
+import { Card } from '@heroui/card';
 import { Role } from '@/lib/generated/prisma/enums';
+import NextLink from '../NextLink';
 
 type Props = {
   id: string;

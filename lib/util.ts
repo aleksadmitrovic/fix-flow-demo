@@ -1,8 +1,6 @@
 import { format } from 'date-fns';
 import { MemberAssignableRole } from '@/types';
-import { Priority, TicketStatus } from './generated/prisma/enums';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import { MdOutlineHorizontalRule } from 'react-icons/md';
+import { Priority, Role, TicketStatus } from './generated/prisma/enums';
 
 // Date utils functions
 export function generateJoinCode(length: number): string {
@@ -30,6 +28,14 @@ export function validateMemberRole(role: MemberAssignableRole) {
     'PENDING',
   ];
   return validRoles.includes(role);
+}
+
+export function getMemberRoles() {
+  return [
+    { value: Role.CLIENT, label: 'Client' },
+    { value: Role.TECHNICIAN, label: 'Technician' },
+    { value: Role.PENDING, label: 'Pending' },
+  ];
 }
 
 export function getPriorities() {

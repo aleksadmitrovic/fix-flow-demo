@@ -1,21 +1,23 @@
 'use client';
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
-import { Button } from '@heroui/button';
 import React, { useState } from 'react';
+import { Button } from '@heroui/button';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Input } from '@heroui/input';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+
 import AppLogo from '@/components/AppLogo';
 import {
   EyeFilledIcon,
   EyeSlashFilledIcon,
 } from '@/components/EyeSlashFilledIcon';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginSchema, loginSchema } from '@/lib/schemas/loginFormSchema';
 import { signInUser } from '@/app/actions/authActions';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import { LoginSchema, loginSchema } from '@/lib/schemas/loginFormSchema';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -47,9 +49,9 @@ export default function LoginForm() {
       <CardHeader className="flex flex-col">
         <AppLogo width={150} />
         <div className="flex flex-col items-baseline justify-center w-full">
-          <h1 className="text-3xl">Login</h1>
+          <h1 className="text-lg md:text-2xl">Login</h1>
           <div>
-            <span>Sign in to your account</span>
+            <span className="text-sm md:text-xl">Sign in to your account</span>
           </div>
         </div>
       </CardHeader>

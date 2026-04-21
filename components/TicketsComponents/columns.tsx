@@ -1,8 +1,3 @@
-// export type ColumnType = {
-//   key: string;
-//   label: string;
-// };
-
 import { TicketDto } from '@/types';
 
 export type ColumnKey = keyof TicketDto | 'actions';

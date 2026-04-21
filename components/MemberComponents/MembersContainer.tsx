@@ -1,8 +1,6 @@
 'use client';
 import React, { useState, useTransition } from 'react';
-import MembersTable from './MembersTable';
 import { useDisclosure } from '@heroui/react';
-import ConfirmationModal from '../ConfirmationModal';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,6 +8,8 @@ import {
   updateMemberRole,
 } from '@/app/actions/membershipActions';
 import { MemberAssignableRole, MembershipUserDto } from '@/types';
+import MembersTable from './MembersTable';
+import ConfirmationModal from '../ConfirmationModal';
 
 type Props = {
   members: MembershipUserDto[];

@@ -11,9 +11,9 @@ export default async function TicketsPage({
   params: Promise<{ workspaceId: string }>;
   searchParams: Promise<{ page?: string }>;
 }) {
-  const { workspaceId } = await params;
-  const page = Number((await searchParams).page) || 1;
-  const result = await getAllTicketsByWorkspaceId(workspaceId, page);
+  const [{ workspaceId }, { page }] = await Promise.all([params, searchParams]);
+  const pageNumber = Number(page) || 1;
+  const result = await getAllTicketsByWorkspaceId(workspaceId, pageNumber);
 
   if (result.status !== 'success') {
     notFound();
@@ -26,7 +26,7 @@ export default async function TicketsPage({
       columns={columns}
       tickets={tickets}
       totalPages={totalPages}
-      currentPage={page}
+      currentPage={pageNumber}
       permissions={permissions}
       workspaceId={workspaceId}
     />
