@@ -1,6 +1,5 @@
 import { getWorkspaceMembersForOwner } from '@/app/actions/membershipActions';
 import MembersContainer from '@/components/MemberComponents/MembersContainer';
-import MembersTable from '@/components/MemberComponents/MembersTable';
 
 export default async function MembersPage({
   params,
