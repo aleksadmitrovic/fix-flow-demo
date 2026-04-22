@@ -38,8 +38,8 @@ export default function CreateCompanyModal({
   async function onSubmit(data: WorkspaceCreateSchema) {
     const result = await createWorkspace(data);
     if (result.status === 'success') {
+      router.push(`/workspace/${result.data.id}/members`);
       toast.success('Company created successfully');
-      router.push(`/workspace/${result.data.id}`);
     } else {
       toast.error('Failed to create company');
     }
