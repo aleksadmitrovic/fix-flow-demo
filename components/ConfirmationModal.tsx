@@ -10,9 +10,10 @@ import { Button } from '@heroui/button';
 
 type Props = {
   isOpen: boolean;
-  onOpenChange: () => void;
   title?: string | null;
   body: string;
+  isLoading: boolean;
+  onOpenChange: () => void;
   onConfirm: () => void;
 };
 
@@ -22,6 +23,7 @@ export default function ConfirmationModal({
   title,
   body,
   onConfirm,
+  isLoading,
 }: Props) {
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -31,10 +33,20 @@ export default function ConfirmationModal({
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             <ModalBody>{body}</ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="flat" onPress={onClose}>
+              <Button
+                isDisabled={isLoading}
+                color="danger"
+                variant="flat"
+                onPress={onClose}
+              >
                 Cancel
               </Button>
-              <Button color="success" variant="flat" onPress={onConfirm}>
+              <Button
+                isLoading={isLoading}
+                color="success"
+                variant="flat"
+                onPress={onConfirm}
+              >
                 Confirm
               </Button>
             </ModalFooter>

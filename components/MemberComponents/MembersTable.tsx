@@ -16,13 +16,16 @@ import { useCallback, useMemo } from 'react';
 import { ColumnKey, columns } from './columns';
 import { ActionTooltip } from '../TicketsComponents/ActionTooltip';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { getMemberRoles } from '@/lib/util';
+import { LuCopy } from 'react-icons/lu';
+import { copyToClipboard, getMemberRoles } from '@/lib/util';
+import { Code } from '@heroui/code';
 
 type MembersTableProps = {
   members: MembershipUserDto[];
   totalPages: number;
   currentPage: number;
   isLoading: boolean;
+  joinCode?: string | null;
   handleRoleChange: (id: string, role: MemberAssignableRole) => void;
   callRemoveMember: (id: string) => void;
 };
@@ -34,6 +37,7 @@ export default function MembersTable({
   callRemoveMember,
   handleRoleChange,
   isLoading,
+  joinCode,
 }: MembersTableProps) {
   const roles = useMemo(() => getMemberRoles(), []);
   const router = useRouter();
@@ -95,6 +99,21 @@ export default function MembersTable({
       <Table
         aria-label="Workspace members"
         className="min-w-75 "
+        topContent={
+          <div className="flex items-center gap-2 bg-slate-100 w-fit p-2 rounded-2xl">
+            <span>Join Code:</span>
+            <Code size="md" className="text-teal-700 ">
+              {joinCode}
+            </Code>
+            <button
+              onClick={() => copyToClipboard(joinCode ? joinCode : '')}
+              className="cursor-pointer hover:opacity-70 transition"
+              title="Copy join code"
+            >
+              <LuCopy size={16} />
+            </button>
+          </div>
+        }
         bottomContent={
           <div className="flex w-full justify-center mt-4">
             <Pagination

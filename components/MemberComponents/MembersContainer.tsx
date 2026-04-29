@@ -15,12 +15,14 @@ type Props = {
   members: MembershipUserDto[];
   totalPages: number;
   currentPage: number;
+  joinCode?: string | null;
 };
 
 export default function MembersContainer({
   currentPage,
   members,
   totalPages,
+  joinCode,
 }: Props) {
   const [memberId, setMemberId] = useState<string>();
   const router = useRouter();
@@ -69,12 +71,14 @@ export default function MembersContainer({
         callRemoveMember={callRemoveMember}
         isLoading={isPending}
         handleRoleChange={handleRoleChange}
+        joinCode={joinCode}
       />
       <ConfirmationModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         body="Are you sure you want to remove member from workspace"
         onConfirm={handleRemoveMember}
+        isLoading={isPending}
       />
     </div>
   );

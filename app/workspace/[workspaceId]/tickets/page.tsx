@@ -2,7 +2,6 @@ import React from 'react';
 import { columns } from '../../../../components/TicketsComponents/columns';
 import TicketsContainer from '@/components/TicketsComponents/TicketsContainer';
 import { getAllTicketsByWorkspaceId } from '@/app/actions/ticketsActions';
-import { notFound } from 'next/navigation';
 
 export default async function TicketsPage({
   params,
@@ -11,12 +10,15 @@ export default async function TicketsPage({
   params: Promise<{ workspaceId: string }>;
   searchParams: Promise<{ page?: string }>;
 }) {
-  const [{ workspaceId }, { page }] = await Promise.all([params, searchParams]);
-  const pageNumber = Number(page) || 1;
+  const { workspaceId } = await params;
+  const pageNumber = Number((await searchParams).page) || 1;
   const result = await getAllTicketsByWorkspaceId(workspaceId, pageNumber);
 
   if (result.status !== 'success') {
-    notFound();
+    const error =
+      typeof result.error === 'string' ? result.error : 'Something went wrong';
+
+    return <div className="p-6 text-red-500">{error}</div>;
   }
 
   const { tickets, totalPages, permissions } = result.data;

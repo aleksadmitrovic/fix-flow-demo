@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { MemberAssignableRole } from '@/types';
 import { Priority, Role, TicketStatus } from './generated/prisma/enums';
+import toast from 'react-hot-toast';
 
 // Date utils functions
 export function generateJoinCode(length: number): string {
@@ -38,6 +39,7 @@ export function getMemberRoles() {
   ];
 }
 
+//  Priorities utils functions
 export function getPriorities() {
   return [
     { value: Priority.HIGH, label: `High` },
@@ -46,10 +48,16 @@ export function getPriorities() {
   ];
 }
 
+//  Status utils functions
 export function getTicketStatus() {
   return [
     { value: TicketStatus.OPEN, label: 'Open' },
     { value: TicketStatus.IN_PROGRESS, label: 'In Progress' },
     { value: TicketStatus.CLOSED, label: 'Closed' },
   ];
+}
+
+export function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text);
+  toast.success('Copied to clipboard');
 }

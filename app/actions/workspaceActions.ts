@@ -193,3 +193,33 @@ export async function joinWorkspace(
     return { status: 'error', error: 'Something went wrong' };
   }
 }
+
+export async function deleteWorkspace(
+  workspaceId: string,
+): Promise<ActionResult<Workspace>> {
+  try {
+    const result = await prisma.workspace.delete({
+      where: { id: workspaceId },
+    });
+
+    return { status: 'success', data: result };
+  } catch (error) {
+    console.error(error);
+    return { status: 'error', error: 'Something went wrong' };
+  }
+}
+
+export async function getWorkspaceJoinCode(workspaceId: string) {
+  try {
+    return prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      select: {
+        joinCode: true,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}

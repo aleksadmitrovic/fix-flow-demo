@@ -125,6 +125,7 @@ export default function TicketsContainer({
         onOpenChange={onOpenChange}
         body="Are you sure you want to remove member from workspace"
         onConfirm={handleDeleteTicket}
+        isLoading={isPending}
       />
       <AssignTicketModal
         isOpen={isAssignModalOpen}

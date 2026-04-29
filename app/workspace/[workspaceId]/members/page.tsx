@@ -1,4 +1,5 @@
 import { getWorkspaceMembersForOwner } from '@/app/actions/membershipActions';
+import { getWorkspaceJoinCode } from '@/app/actions/workspaceActions';
 import MembersContainer from '@/components/MemberComponents/MembersContainer';
 
 export default async function MembersPage({
@@ -11,17 +12,27 @@ export default async function MembersPage({
   const { workspaceId } = await params;
   const currentPage = Number((await searchParams).page) || 1;
 
-  const result = await getWorkspaceMembersForOwner(workspaceId, currentPage, 5);
-  if (result.status !== 'success') {
-    return null;
+  const [joinCodeResult, membersResult] = await Promise.all([
+    getWorkspaceJoinCode(workspaceId),
+    getWorkspaceMembersForOwner(workspaceId, currentPage, 5),
+  ]);
+
+  if (membersResult.status !== 'success') {
+    const error =
+      typeof membersResult.error === 'string'
+        ? membersResult.error
+        : 'Something went wrong';
+
+    return <div className="p-6 text-red-500">{error}</div>;
   }
-  const { members, totalPages } = result.data;
+  const { members, totalPages } = membersResult.data;
 
   return (
     <MembersContainer
       members={members}
       totalPages={totalPages}
       currentPage={currentPage}
+      joinCode={joinCodeResult?.joinCode}
     />
   );
 }
