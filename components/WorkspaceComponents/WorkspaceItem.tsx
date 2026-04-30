@@ -8,6 +8,7 @@ import { deleteWorkspace } from '@/app/actions/workspaceActions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import ConfirmationModal from '../ConfirmationModal';
+import { FaArrowRightToBracket } from 'react-icons/fa6';
 
 type Props = {
   id: string;
@@ -20,8 +21,6 @@ export default function WorkspaceItem({ id, name, role, createdAt }: Props) {
   const [isPending, startTransition] = useTransition();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const href =
-    role === 'ADMIN' ? `/workspace/${id}/members` : `/workspace/${id}/tickets`;
 
   function handleDeleteWorkspace() {
     startTransition(async () => {
@@ -58,12 +57,26 @@ export default function WorkspaceItem({ id, name, role, createdAt }: Props) {
               Go to workspace
             </span>
           ) : (
-            <NextLink
-              href={href}
-              className="mt-2 inline-block text-blue-600 hover:underline"
-            >
-              Go to workspace
-            </NextLink>
+            <div className="flex flex-col">
+              <NextLink
+                href={`/workspace/${id}/tickets`}
+                className="mt-2 inline-block text-blue-600 hover:underline "
+              >
+                <div className="flex justify-baseline items-center gap-2 ">
+                  <FaArrowRightToBracket /> <span>Tickets</span>
+                </div>
+              </NextLink>
+              {role === 'ADMIN' && (
+                <NextLink
+                  href={`/workspace/${id}/members`}
+                  className="mt-2 inline-block text-blue-600 hover:underline"
+                >
+                  <div className="flex justify-baseline items-center gap-2">
+                    <FaArrowRightToBracket /> <span>Members</span>
+                  </div>
+                </NextLink>
+              )}
+            </div>
           )}
         </CardBody>
         <CardFooter>

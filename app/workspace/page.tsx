@@ -3,7 +3,7 @@ import { WorkspaceListContainer } from '@/components/WorkspaceComponents/Workspa
 
 export default async function WorkspacePage() {
   return (
-    <div className="h-screen flex flex-col md:flex-row md:h-full">
+    <div className="flex flex-col md:flex-row md:h-full">
       <WorkspaceEntry />
       <WorkspaceListContainer />
     </div>

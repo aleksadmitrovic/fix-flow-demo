@@ -17,8 +17,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <TopNav />
-          <main className=" bg-gray-100  vertical-center">{children}</main>
+          <div className=" h-screen flex flex-col overflow-hidden">
+            <TopNav />
+            <main className=" bg-gray-100 flex-1 overflow-y-auto">
+              {children}
+            </main>
+          </div>
         </Providers>
       </body>
     </html>

@@ -197,6 +197,20 @@ export async function joinWorkspace(
 export async function deleteWorkspace(
   workspaceId: string,
 ): Promise<ActionResult<Workspace>> {
+  const session = await getServerSession();
+  if (!session) return { status: 'error', error: 'Unauthorized' };
+
+  const workspace = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { ownerId: true },
+  });
+
+  if (!workspace) return { status: 'error', error: 'Workspace not found' };
+
+  if (workspace.ownerId !== session.user.id) {
+    return { status: 'error', error: 'Only the owner can delete this workspace' };
+  }
+
   try {
     const result = await prisma.workspace.delete({
       where: { id: workspaceId },

@@ -14,7 +14,7 @@ export default function NavLink({ href, label }: Props) {
 
   return (
     <NavbarItem isActive={pathName === href} as={Link} href={href}>
-      <span>{label}</span>
+      <span className="text-sm md:text-2xl">{label}</span>
     </NavbarItem>
   );
 }

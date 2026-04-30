@@ -1,6 +1,10 @@
-import { getWorkspaceMembersForOwner } from '@/app/actions/membershipActions';
+import {
+  getWorkspaceMembersForOwner,
+  isWorkspaceAdmin,
+} from '@/app/actions/membershipActions';
 import { getWorkspaceJoinCode } from '@/app/actions/workspaceActions';
 import MembersContainer from '@/components/MemberComponents/MembersContainer';
+import { redirect } from 'next/navigation';
 
 export default async function MembersPage({
   params,
@@ -11,6 +15,10 @@ export default async function MembersPage({
 }) {
   const { workspaceId } = await params;
   const currentPage = Number((await searchParams).page) || 1;
+
+  const isAdmin = await isWorkspaceAdmin(workspaceId);
+
+  if (!isAdmin) redirect('/workspace');
 
   const [joinCodeResult, membersResult] = await Promise.all([
     getWorkspaceJoinCode(workspaceId),

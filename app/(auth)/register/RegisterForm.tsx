@@ -155,7 +155,7 @@ export default function RegisterForm() {
         <div>
           <p>or</p>
         </div>
-        <Button isDisabled={isSubmitting} fullWidth variant="bordered">
+        <Button isDisabled={true} fullWidth variant="bordered">
           <FcGoogle size={20} /> Sign up with Google
         </Button>
       </CardFooter>

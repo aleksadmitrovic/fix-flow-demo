@@ -21,8 +21,8 @@ export default function WorkspaceEntry() {
   } = useDisclosure();
 
   return (
-    <div className="flex items-center justify-center min-h-full md:w-1/2 bg-linear-to-b from-slate-50 to-slate-100 p-4">
-      <Card className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl shadow-xl border border-gray-200">
+    <div className="flex items-center justify-center min-h-full md:w-1/2 bg-linear-to-b from-slate-50 to-slate-100 p-2 sm:p-4">
+      <Card className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl shadow-xl border border-gray-200">
         <CardBody className="flex flex-col items-center text-center gap-6 p-6 sm:p-8 md:p-10">
           <div className="flex items-center justify-center w-16 h-16 rounded-full bg-teal-100">
             <LuBuilding2 className="w-8 h-8 text-teal-600" />

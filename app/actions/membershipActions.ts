@@ -179,3 +179,27 @@ export async function getCurrentMemberOnWorkspace(
     return { status: 'error', error: 'Something went wrong' };
   }
 }
+
+export async function isWorkspaceAdmin(workspaceId: string): Promise<boolean> {
+  try {
+    const session = await getServerSession();
+
+    if (!session?.user) {
+      return false;
+    }
+
+    const result = await prisma.workspace.findFirst({
+      where: {
+        id: workspaceId,
+      },
+      select: {
+        ownerId: true,
+      },
+    });
+
+    return session.user.id === result?.ownerId;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
