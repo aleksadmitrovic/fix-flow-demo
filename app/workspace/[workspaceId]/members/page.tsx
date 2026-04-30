@@ -40,6 +40,7 @@ export default async function MembersPage({
       members={members}
       totalPages={totalPages}
       currentPage={currentPage}
+      workspaceId={workspaceId}
       joinCode={joinCodeResult?.joinCode}
     />
   );

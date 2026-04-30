@@ -16,6 +16,7 @@ type Props = {
   totalPages: number;
   currentPage: number;
   joinCode?: string | null;
+  workspaceId: string;
 };
 
 export default function MembersContainer({
@@ -23,6 +24,7 @@ export default function MembersContainer({
   members,
   totalPages,
   joinCode,
+  workspaceId,
 }: Props) {
   const [memberId, setMemberId] = useState<string>();
   const router = useRouter();
@@ -39,7 +41,7 @@ export default function MembersContainer({
       return;
     }
     startTransition(async () => {
-      const result = await removeMemberFromWorkspace(memberId);
+      const result = await removeMemberFromWorkspace(memberId, workspaceId);
       if (result.status === 'success') {
         toast.success(`Successfully removed ${result.data}`);
         onOpenChange();
@@ -52,7 +54,7 @@ export default function MembersContainer({
 
   function handleRoleChange(memberId: string, role: MemberAssignableRole) {
     startTransition(async () => {
-      const result = await updateMemberRole(memberId, role);
+      const result = await updateMemberRole(memberId, role, workspaceId);
       if (result.status === 'success') {
         toast.success(`Successfully updated ${result.data} role`);
         router.refresh();

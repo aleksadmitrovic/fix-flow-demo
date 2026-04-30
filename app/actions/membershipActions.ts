@@ -81,36 +81,27 @@ export async function checkIfMemberExist(memberId: string): Promise<boolean> {
 export async function updateMemberRole(
   memberId: string,
   role: MemberAssignableRole,
+  workspaceId: string,
 ): Promise<ActionResult<string>> {
+  const session = await getServerSession();
+  if (!session) return { status: 'error', error: 'Unauthorized' };
+
   if (!validateMemberRole(role)) {
     return { status: 'error', error: 'Invalid role' };
   }
 
-  try {
-    if (!(await checkIfMemberExist(memberId))) {
-      return { status: 'error', error: 'Member not found' };
-    }
+  const isAdmin = await isWorkspaceAdmin(workspaceId);
+  if (!isAdmin)
+    return { status: 'error', error: 'Only admin can change roles' };
 
+  try {
     const result = await prisma.membership.update({
-      where: {
-        id: memberId,
-      },
-      data: {
-        role: role,
-      },
-      select: {
-        user: {
-          select: {
-            name: true,
-          },
-        },
-      },
+      where: { id: memberId },
+      data: { role },
+      select: { user: { select: { name: true } } },
     });
 
-    return {
-      status: 'success',
-      data: result.user.name,
-    };
+    return { status: 'success', data: result.user.name };
   } catch (error) {
     console.error('updateMemberRole error:', error);
     return { status: 'error', error: 'Something went wrong' };
@@ -119,27 +110,22 @@ export async function updateMemberRole(
 
 export async function removeMemberFromWorkspace(
   memberId: string,
+  workspaceId: string,
 ): Promise<ActionResult<string>> {
-  try {
-    if (!(await checkIfMemberExist(memberId))) {
-      return { status: 'error', error: 'Member not found' };
-    }
+  const session = await getServerSession();
+  if (!session) return { status: 'error', error: 'Unauthorized' };
 
+  const isAdmin = await isWorkspaceAdmin(workspaceId);
+  if (!isAdmin)
+    return { status: 'error', error: 'Only admin can remove members' };
+
+  try {
     const result = await prisma.membership.delete({
-      where: {
-        id: memberId,
-      },
-      select: {
-        user: {
-          select: { name: true },
-        },
-      },
+      where: { id: memberId },
+      select: { user: { select: { name: true } } },
     });
 
-    return {
-      status: 'success',
-      data: result.user.name,
-    };
+    return { status: 'success', data: result.user.name };
   } catch (error) {
     console.error('removeMemberFromWorkspace error:', error);
     return { status: 'error', error: 'Something went wrong' };
