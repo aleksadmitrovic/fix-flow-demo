@@ -3,7 +3,9 @@ import React, { useTransition } from 'react';
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Role } from '@/lib/generated/prisma/enums';
 import NextLink from '../NextLink';
-import { Button, useDisclosure } from '@heroui/react';
+import { useDisclosure } from '@heroui/react';
+import { Divider } from '@heroui/divider';
+import { Button } from '@heroui/button';
 import { deleteWorkspace } from '@/app/actions/workspaceActions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -40,10 +42,11 @@ export default function WorkspaceItem({ id, name, role, createdAt }: Props) {
 
   return (
     <>
-      <Card className="p-4 hover:shadow-xl transition ">
+      <Card className="p-2 hover:shadow-xl transition ">
         <CardHeader>
           <h4 className="font-semibold text-lg">{name}</h4>
         </CardHeader>
+        <Divider />
         <CardBody>
           <p>
             Role:

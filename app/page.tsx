@@ -61,8 +61,8 @@ export default async function Home() {
             <div className="p-6 bg-linear-to-b from-teal-50 to-white rounded-xl border-2 border-teal-700">
               <h3 className="font-semibold text-lg">Service Tracking</h3>
               <p className="text-gray-600 mt-2">
-                Service teams receive requests instantly and track repair
-                progress in real time.
+                Service teams receive and manage repair requests from a
+                centralized dashboard.
               </p>
             </div>
 
@@ -95,8 +95,8 @@ export default async function Home() {
               <div className="text-3xl font-bold text-gray-300">2</div>
               <h3 className="font-semibold mt-4">Service Review</h3>
               <p className="text-gray-600 mt-2">
-                The service team reviews the issue and assigns it to a
-                technician.
+                Clients submit tickets and technicians manage and resolve them
+                through a shared workspace.
               </p>
             </div>
 
