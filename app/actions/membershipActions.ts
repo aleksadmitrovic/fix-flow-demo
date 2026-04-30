@@ -66,18 +66,6 @@ export async function getWorkspaceMembersForOwner(
   }
 }
 
-export async function checkIfMemberExist(memberId: string): Promise<boolean> {
-  try {
-    const existingMember = await prisma.membership.findUnique({
-      where: { id: memberId },
-    });
-    return !!existingMember;
-  } catch (error) {
-    console.error(`checkIfMemberExist error:`, error);
-    return false;
-  }
-}
-
 export async function updateMemberRole(
   memberId: string,
   role: MemberAssignableRole,
