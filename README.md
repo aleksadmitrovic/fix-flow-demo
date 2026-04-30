@@ -6,6 +6,8 @@ A workspace and ticket management application for managing support requests betw
 
 [https://fix-flow-demo.vercel.app](https://fix-flow-demo.vercel.app)
 
+Register with a dummy email — no real email required.
+
 ## Features
 
 - Role-based access control (Admin, Technician, Client)
