@@ -20,6 +20,8 @@ import { getCurrentMemberOnWorkspace } from './membershipActions';
 import { canCloseTicket, canOpenTicket } from '../services/ticketService';
 
 export async function getTicketById(id: string): Promise<ActionResult<Ticket>> {
+  const session = await getServerSession();
+  if (!session) return { status: 'error', error: 'Unauthorized' };
   try {
     const ticket = await prisma.ticket.findUnique({
       where: {
@@ -178,10 +180,6 @@ export async function createTicket(
       },
     });
 
-    if (!ticket) {
-      return { status: 'error', error: 'Failed to create a ticket' };
-    }
-
     return { status: 'success', data: ticket };
   } catch (error) {
     console.error(error);
@@ -212,7 +210,7 @@ export async function updateTicket(
   }
 
   if (membership.role !== 'CLIENT') {
-    return { status: 'error', error: 'Only Client can create tickets' };
+    return { status: 'error', error: 'Only Client can update tickets' };
   }
 
   try {
@@ -226,13 +224,8 @@ export async function updateTicket(
         priority,
         status: 'OPEN',
         workspaceId: workspaceId,
-        createdById: membership.id,
       },
     });
-
-    if (!ticket) {
-      return { status: 'error', error: 'Failed to update a ticket' };
-    }
 
     return { status: 'success', data: ticket };
   } catch (error) {
@@ -338,10 +331,6 @@ export async function assignToTicket(
         scheduleAt: new Date(validated.data.scheduleAt),
       },
     });
-
-    if (!ticket) {
-      return { status: 'error', error: 'Failed to assign to ticket' };
-    }
 
     return { status: 'success', data: ticket };
   } catch (error) {
