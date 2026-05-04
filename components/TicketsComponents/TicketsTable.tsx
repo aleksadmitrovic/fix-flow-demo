@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@heroui/table';
-import { Chip, ChipProps } from '@heroui/chip';
+import { Chip } from '@heroui/chip';
 import { Pagination } from '@heroui/pagination';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { LuPencilLine } from 'react-icons/lu';
@@ -20,7 +20,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Permissions, TicketDto } from '@/types';
 import { ActionTooltip } from './ActionTooltip';
 import { FaCheckCircle } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { LuRotateCcw } from 'react-icons/lu';
+import { priorityColorMap, statusColorMap } from './ticketUtils';
 
 type TicketTableProps = {
   tickets: TicketDto[];
@@ -34,19 +36,7 @@ type TicketTableProps = {
   callAssignTicket: (ticketId: string) => void;
   handleCloseTicket: (ticket: TicketDto) => void;
   handleReopenTicket: (ticket: TicketDto) => void;
-};
-
-type ChipColor = ChipProps['color'];
-
-const statusColorMap: Record<TicketStatus, ChipColor> = {
-  [TicketStatus.OPEN]: 'warning',
-  [TicketStatus.CLOSED]: 'success',
-  [TicketStatus.IN_PROGRESS]: 'primary',
-};
-const priorityColorMap: Record<Priority, ChipColor> = {
-  [Priority.HIGH]: 'danger',
-  [Priority.MEDIUM]: 'warning',
-  [Priority.LOW]: 'success',
+  callReadTicket: (ticket: TicketDto) => void;
 };
 
 export default function TicketTable({
@@ -61,6 +51,7 @@ export default function TicketTable({
   callAssignTicket,
   handleCloseTicket,
   handleReopenTicket,
+  callReadTicket,
 }: TicketTableProps) {
   const { canDelete, canAssign, canUpdate, canReopen } = permissions;
   const searchParams = useSearchParams();
@@ -78,6 +69,12 @@ export default function TicketTable({
       if (columnKey === 'actions') {
         return (
           <div className="relative flex items-center gap-4">
+            <ActionTooltip
+              content="Ticket detail"
+              color="primary"
+              icon={<FaEye size={20} />}
+              onClick={() => callReadTicket(ticket)}
+            />
             {canUpdate && (
               <ActionTooltip
                 content="Edit ticket"
@@ -94,7 +91,7 @@ export default function TicketTable({
                 onClick={() => callDeleteTicket(ticket)}
               />
             )}
-            {canReopen && ticket.completedAt && (
+            {canReopen && ticket.status === 'CLOSED' && (
               <ActionTooltip
                 content="Reopen ticket"
                 color="primary"
@@ -110,7 +107,7 @@ export default function TicketTable({
                 onClick={() => callAssignTicket(ticket.id)}
               />
             )}
-            {canAssign && ticket.assignedTo && (
+            {canAssign && ticket.assignedTo && !ticket.completedAt && (
               <ActionTooltip
                 content="Mark as done"
                 color="success"
@@ -160,6 +157,7 @@ export default function TicketTable({
       callAssignTicket,
       handleCloseTicket,
       handleReopenTicket,
+      callReadTicket,
     ],
   );
 

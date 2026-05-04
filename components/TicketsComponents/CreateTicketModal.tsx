@@ -92,6 +92,7 @@ export default function CreateTicketModal({
       aria-label="Create Ticket Modal"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      onClose={reset}
       classNames={{
         wrapper: 'items-end items-center sm:justify-center',
         base: 'mx-2 sm:mx-4',
@@ -99,79 +100,78 @@ export default function CreateTicketModal({
       }}
     >
       <ModalContent className="w-full max-w-md sm:max-w-lg lg:max-w-xl max-h-[90vh] overflow-y-auto">
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex justify-center bg-teal-700 text-gray-100">
-              <p>Create Ticket</p>
-            </ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                id="createTicket"
-                className="flex flex-col gap-4 p-4 sm:p-6"
-              >
-                <Input
-                  {...register('title')}
-                  label="Title"
-                  labelPlacement="inside"
-                  variant="bordered"
-                  color="primary"
-                  isInvalid={!!errors.title}
-                  errorMessage={errors.title?.message}
-                  isRequired
-                />
-                <Textarea
-                  {...register('description')}
-                  label="Description"
-                  labelPlacement="inside"
-                  variant="bordered"
-                  color="primary"
-                />
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                  <label className="flex items-center gap-1 text-blue-500 whitespace-nowrap">
-                    Priority: <span className="text-red-500">*</span>
-                  </label>
+        <ModalHeader className="flex justify-center bg-teal-700 text-gray-100">
+          <p>Create Ticket</p>
+        </ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="createTicket"
+            className="flex flex-col gap-4 p-4 sm:p-6"
+          >
+            <Input
+              {...register('title')}
+              label="Title"
+              labelPlacement="inside"
+              variant="bordered"
+              color="primary"
+              isInvalid={!!errors.title}
+              errorMessage={errors.title?.message}
+              isRequired
+            />
+            <Textarea
+              {...register('description')}
+              label="Description"
+              labelPlacement="inside"
+              variant="bordered"
+              color="primary"
+            />
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+              <label className="flex items-center gap-1 text-blue-500 whitespace-nowrap">
+                Priority: <span className="text-red-500">*</span>
+              </label>
 
-                  <select
-                    required
-                    {...register('priority')}
-                    className="w-full rounded-xl p-2 pr-10 border-2 border-gray-200 bg-white focus:border-blue-500 focus:outline-none"
-                  >
-                    {priorities.map((priority) => (
-                      <option key={priority.value} value={priority.value}>
-                        {priority.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <input
-                  type="hidden"
-                  {...register('workspaceId')}
-                  value={params.workspaceId}
-                />
-              </form>
-            </ModalBody>
-            <ModalFooter className="flex flex-col-reverse sm:flex-row gap-2">
-              <Button
-                isDisabled={isSubmitting}
-                color="danger"
-                variant="flat"
-                onPress={onClose}
+              <select
+                required
+                {...register('priority')}
+                className="w-full rounded-xl p-2 pr-10 border-2 border-gray-200 bg-white focus:border-blue-500 focus:outline-none"
               >
-                Close
-              </Button>
-              <Button
-                isLoading={isSubmitting}
-                form="createTicket"
-                type="submit"
-                color="primary"
-                variant="flat"
-              >
-                {mode === 'create' ? 'Create' : 'Update'}
-              </Button>
-            </ModalFooter>
-          </>
-        )}
+                {priorities.map((priority) => (
+                  <option key={priority.value} value={priority.value}>
+                    {priority.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <input
+              type="hidden"
+              {...register('workspaceId')}
+              value={params.workspaceId}
+            />
+          </form>
+        </ModalBody>
+        <ModalFooter className="flex flex-col-reverse sm:flex-row gap-2">
+          <Button
+            isDisabled={isSubmitting}
+            color="danger"
+            variant="flat"
+            onPress={() => {
+              onOpenChange();
+              reset();
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            isLoading={isSubmitting}
+            form="createTicket"
+            type="submit"
+            color="primary"
+            variant="flat"
+          >
+            {mode === 'create' ? 'Create' : 'Update'}
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

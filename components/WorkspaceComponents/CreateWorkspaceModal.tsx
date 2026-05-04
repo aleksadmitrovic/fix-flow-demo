@@ -28,6 +28,7 @@ export default function CreateCompanyModal({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<WorkspaceCreateSchema>({
     resolver: zodResolver(workspaceCreateSchema),
@@ -38,56 +39,57 @@ export default function CreateCompanyModal({
   async function onSubmit(data: WorkspaceCreateSchema) {
     const result = await createWorkspace(data);
     if (result.status === 'success') {
-      router.push(`/workspace/${result.data.id}/members`);
+      router.refresh();
       toast.success('Company created successfully');
+      onOpenChange();
+      reset();
     } else {
       toast.error('Failed to create company');
     }
   }
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={reset}>
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex justify-center bg-teal-800 text-gray-100">
-              <p>Create Your Workspace</p>
-            </ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                id="createCompany"
-                className="flex flex-col gap-2"
-              >
-                <Input
-                  {...register('name')}
-                  label="Name"
-                  labelPlacement="inside"
-                  variant="bordered"
-                />
-              </form>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                isDisabled={isSubmitting}
-                color="danger"
-                variant="flat"
-                onPress={onClose}
-              >
-                Close
-              </Button>
-              <Button
-                isLoading={isSubmitting}
-                form="createCompany"
-                type="submit"
-                color="primary"
-                variant="flat"
-              >
-                Create
-              </Button>
-            </ModalFooter>
-          </>
-        )}
+        <ModalHeader className="flex justify-center bg-teal-800 text-gray-100">
+          <p>Create Your Workspace</p>
+        </ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="createCompany"
+            className="flex flex-col gap-2"
+          >
+            <Input
+              {...register('name')}
+              label="Name"
+              labelPlacement="inside"
+              variant="bordered"
+            />
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            isDisabled={isSubmitting}
+            color="danger"
+            variant="flat"
+            onPress={() => {
+              onOpenChange();
+              reset();
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            isLoading={isSubmitting}
+            form="createCompany"
+            type="submit"
+            color="primary"
+            variant="flat"
+          >
+            Create
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

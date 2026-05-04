@@ -16,6 +16,7 @@ import CreateTicketModal from './CreateTicketModal';
 import AssignTicketModal from './AssignTicketModal';
 import ConfirmationModal from '../ConfirmationModal';
 import { ColumnType } from './columns';
+import ReviewTicketModal from './ReviewTicketModal';
 
 type TicketTableProps = {
   tickets: TicketDto[];
@@ -37,8 +38,8 @@ export default function TicketsContainer({
   const [ticketId, setTicketId] = useState<string>('');
   const [selectedTicket, setSelectedTicket] = useState<TicketDto | null>(null);
   const [isPending, startTransition] = useTransition();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isTicketModalOpen,
     onOpen: openTicketModal,
@@ -48,6 +49,11 @@ export default function TicketsContainer({
     isOpen: isAssignModalOpen,
     onOpen: openAssignModal,
     onOpenChange: onAssignModalChange,
+  } = useDisclosure();
+  const {
+    isOpen: isDetailModalOpen,
+    onOpen: openDetailModal,
+    onOpenChange: onDetailModalChange,
   } = useDisclosure();
 
   const router = useRouter();
@@ -87,6 +93,11 @@ export default function TicketsContainer({
     openAssignModal();
   }
 
+  function callReadTicket(ticket: TicketDto) {
+    setSelectedTicket(ticket);
+    openDetailModal();
+  }
+
   function handleCloseTicket(ticket: TicketDto) {
     if (!ticket || !workspaceId) return;
     startTransition(async () => {
@@ -114,6 +125,11 @@ export default function TicketsContainer({
 
   return (
     <>
+      <ReviewTicketModal
+        isOpen={isDetailModalOpen}
+        onOpenChange={onDetailModalChange}
+        ticket={selectedTicket}
+      />
       <CreateTicketModal
         isOpen={isTicketModalOpen}
         onOpenChange={onTicketModalChange}
@@ -123,7 +139,7 @@ export default function TicketsContainer({
       <ConfirmationModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        body="Are you sure you want to remove member from workspace"
+        body="Are you sure you want to delete this ticket"
         onConfirm={handleDeleteTicket}
         isLoading={isPending}
       />
@@ -155,6 +171,7 @@ export default function TicketsContainer({
         callAssignTicket={callAssignTicket}
         handleCloseTicket={handleCloseTicket}
         handleReopenTicket={handleReopenTicket}
+        callReadTicket={callReadTicket}
       />
     </>
   );

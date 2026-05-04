@@ -28,7 +28,7 @@ export function ActionTooltip({
     <Tooltip
       className="bg-slate-100 text-teal-700"
       content={content}
-      offset={-7}
+      offset={-1}
     >
       <span
         hidden={hidden}

@@ -59,6 +59,7 @@ export default function AssignTicketModal({
       aria-label="Create Ticket Modal"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      onClose={reset}
       classNames={{
         wrapper: 'items-end items-center sm:justify-center',
         base: 'mx-2 sm:mx-4',
@@ -66,62 +67,61 @@ export default function AssignTicketModal({
       }}
     >
       <ModalContent className="w-full max-w-md sm:max-w-lg lg:max-w-xl max-h-[90vh] overflow-y-auto">
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex justify-center bg-teal-700 text-gray-100">
-              <p>Create Ticket</p>
-            </ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                id="assignTicket"
-                className="flex flex-col gap-4 p-4 sm:p-6"
-              >
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm text-default-500 pl-0.5">
-                    Schedule at
-                  </label>
-                  <div className="border-2 border-primary rounded-xl px-3 py-2.5">
-                    <input
-                      {...register('scheduleAt')}
-                      type="datetime-local"
-                      className="w-full bg-transparent outline-none text-sm"
-                    />
-                  </div>
-                  {errors.scheduleAt && (
-                    <p className="text-danger text-xs pl-0.5">
-                      {errors.scheduleAt.message}
-                    </p>
-                  )}
-                </div>
+        <ModalHeader className="flex justify-center bg-teal-700 text-gray-100">
+          <p>Create Ticket</p>
+        </ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="assignTicket"
+            className="flex flex-col gap-4 p-4 sm:p-6"
+          >
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm text-default-500 pl-0.5">
+                Schedule at
+              </label>
+              <div className="border-2 border-primary rounded-xl px-3 py-2.5">
                 <input
-                  type="hidden"
-                  {...register('workspaceId')}
-                  value={params.workspaceId}
+                  {...register('scheduleAt')}
+                  type="datetime-local"
+                  className="w-full bg-transparent outline-none text-sm"
                 />
-              </form>
-            </ModalBody>
-            <ModalFooter className="flex flex-col-reverse sm:flex-row gap-2">
-              <Button
-                isDisabled={isSubmitting}
-                color="danger"
-                variant="flat"
-                onPress={onClose}
-              >
-                Close
-              </Button>
-              <Button
-                isLoading={isSubmitting}
-                form="assignTicket"
-                type="submit"
-                color="primary"
-                variant="flat"
-              >
-                Assign
-              </Button>
-            </ModalFooter>
-          </>
-        )}
+              </div>
+              {errors.scheduleAt && (
+                <p className="text-danger text-xs pl-0.5">
+                  {errors.scheduleAt.message}
+                </p>
+              )}
+            </div>
+            <input
+              type="hidden"
+              {...register('workspaceId')}
+              value={params.workspaceId}
+            />
+          </form>
+        </ModalBody>
+        <ModalFooter className="flex flex-col-reverse sm:flex-row gap-2">
+          <Button
+            isDisabled={isSubmitting}
+            color="danger"
+            variant="flat"
+            onPress={() => {
+              onOpenChange();
+              reset();
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            isLoading={isSubmitting}
+            form="assignTicket"
+            type="submit"
+            color="primary"
+            variant="flat"
+          >
+            Assign
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

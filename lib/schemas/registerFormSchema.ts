@@ -6,10 +6,10 @@ export const registerSchema = z
       message: 'Name must be at least 3 characters',
     }),
     email: z.email(),
-    password: z.string().min(6, {
-      message: 'Password must be at least 6 characters',
+    password: z.string().min(8, {
+      message: 'Password must be at least 8 characters',
     }),
-    passwordConfirm: z.string().min(6, {
+    passwordConfirm: z.string().min(8, {
       message: 'Please confirm password',
     }),
   })

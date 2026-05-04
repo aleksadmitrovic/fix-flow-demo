@@ -124,7 +124,6 @@ export type TicketDto = {
 
 type Permissions = {
   canCreate: boolean;
-  canRead: boolean;
   canUpdate: boolean;
   canDelete: boolean;
   canAssign: boolean;

@@ -26,6 +26,7 @@ export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<WorkspaceJoinSchema>({
     resolver: zodResolver(workspaceJoinSchema),
@@ -38,6 +39,7 @@ export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
     if (result.status === 'success') {
       toast.success('Successfully joined the Company');
       onOpenChange();
+      reset();
       router.refresh();
     } else {
       toast.error(result.error as string);
@@ -45,50 +47,49 @@ export default function JoinCompanyModal({ isOpen, onOpenChange }: ModalProps) {
   }
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={reset}>
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex justify-center bg-teal-800 text-gray-100">
-              <p>Join Company</p>
-            </ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                id="joinCompany"
-                className="flex flex-col gap-4"
-              >
-                <Input
-                  {...register('joinCode')}
-                  label="Join Code"
-                  labelPlacement="inside"
-                  variant="bordered"
-                  isInvalid={!!errors.joinCode}
-                  errorMessage={errors.joinCode?.message as string}
-                />
-              </form>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                isDisabled={isSubmitting}
-                color="danger"
-                variant="flat"
-                onPress={onClose}
-              >
-                Close
-              </Button>
-              <Button
-                isLoading={isSubmitting}
-                form="joinCompany"
-                type="submit"
-                color="primary"
-                variant="flat"
-              >
-                Join
-              </Button>
-            </ModalFooter>
-          </>
-        )}
+        <ModalHeader className="flex justify-center bg-teal-800 text-gray-100">
+          <p>Join Company</p>
+        </ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="joinCompany"
+            className="flex flex-col gap-4"
+          >
+            <Input
+              {...register('joinCode')}
+              label="Join Code"
+              labelPlacement="inside"
+              variant="bordered"
+              isInvalid={!!errors.joinCode}
+              errorMessage={errors.joinCode?.message as string}
+            />
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            isDisabled={isSubmitting}
+            color="danger"
+            variant="flat"
+            onPress={() => {
+              onOpenChange();
+              reset();
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            isLoading={isSubmitting}
+            form="joinCompany"
+            type="submit"
+            color="primary"
+            variant="flat"
+          >
+            Join
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

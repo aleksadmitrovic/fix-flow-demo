@@ -76,7 +76,7 @@ export async function getAllTicketsByWorkspaceId(
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { updatedAt: 'desc' },
         select: {
           id: true,
           title: true,
@@ -128,9 +128,9 @@ export async function getAllTicketsByWorkspaceId(
         totalPages,
         permissions: {
           canCreate: member.data.role === 'CLIENT',
-          canRead: member.data.role === 'CLIENT',
           canUpdate: member.data.role === 'CLIENT',
-          canDelete: member.data.role === 'CLIENT',
+          canDelete:
+            member.data.role === 'CLIENT' || member.data.role === 'ADMIN',
           canReopen: member.data.role === 'CLIENT',
           canAssign: member.data.role === 'TECHNICIAN',
         },
@@ -262,14 +262,14 @@ export async function deleteTicket(id: string): Promise<ActionResult<Ticket>> {
       };
     }
 
-    if (membership.role !== 'CLIENT') {
+    if (membership.role !== 'CLIENT' && membership.role !== 'ADMIN') {
       return {
         status: 'error',
         error: 'Only clients can delete their own tickets',
       };
     }
 
-    if (ticket.createdById !== membership.id) {
+    if (membership.role === 'CLIENT' && ticket.createdById !== membership.id) {
       return { status: 'error', error: 'You can only delete your own tickets' };
     }
 
@@ -292,7 +292,10 @@ export async function assignToTicket(
 ): Promise<ActionResult<Ticket>> {
   const validated = assignTicketSchema.safeParse(data);
   if (!validated.success) {
-    return { status: 'error', error: 'Invalid ticket data' };
+    return {
+      status: 'error',
+      error: validated.error.issues[0].message ?? 'Invalid ticket data',
+    };
   }
 
   try {
