@@ -18,7 +18,7 @@ Register with a dummy email — no real email required.
 
 ## Tech Stack
 
-- **Next.js 14** — App Router, Server Actions
+- **Next.js 16** — App Router, Server Actions
 - **TypeScript**
 - **Prisma** — ORM with PostgreSQL
 - **HeroUI** — component library
