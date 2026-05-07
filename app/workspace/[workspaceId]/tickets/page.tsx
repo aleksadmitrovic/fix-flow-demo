@@ -2,17 +2,28 @@ import React from 'react';
 import { columns } from '../../../../components/TicketsComponents/columns';
 import TicketsContainer from '@/components/TicketsComponents/TicketsContainer';
 import { getAllTicketsByWorkspaceId } from '@/app/actions/ticketsActions';
+import { Priority, TicketStatus } from '@/lib/generated/prisma/enums';
 
 export default async function TicketsPage({
   params,
   searchParams,
 }: {
   params: Promise<{ workspaceId: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{
+    page?: string;
+    status?: TicketStatus;
+    priority?: Priority;
+  }>;
 }) {
   const { workspaceId } = await params;
-  const pageNumber = Number((await searchParams).page) || 1;
-  const result = await getAllTicketsByWorkspaceId(workspaceId, pageNumber);
+  const { page, status, priority } = await searchParams;
+  const pageNumber = Number(page) || 1;
+  const result = await getAllTicketsByWorkspaceId(
+    workspaceId,
+    pageNumber,
+    status,
+    priority,
+  );
 
   if (result.status !== 'success') {
     const error =

@@ -1,6 +1,6 @@
 'use server';
 import prisma from '@/lib/prisma';
-import { Ticket } from '@/lib/generated/prisma/client';
+import { Priority, Ticket, TicketStatus } from '@/lib/generated/prisma/client';
 import { mapTicketToTicketDto } from '@/lib/mappings';
 import {
   createTicketSchema,
@@ -43,7 +43,8 @@ export async function getTicketById(id: string): Promise<ActionResult<Ticket>> {
 export async function getAllTicketsByWorkspaceId(
   workspaceId: string,
   page: number = 1,
-  limit: number = 12,
+  status?: TicketStatus,
+  priority?: Priority,
 ): Promise<
   ActionResult<{
     tickets: TicketDto[];
@@ -51,6 +52,7 @@ export async function getAllTicketsByWorkspaceId(
     permissions: Permissions;
   }>
 > {
+  const limit = 12;
   try {
     const skip = (page - 1) * limit;
 
@@ -64,6 +66,8 @@ export async function getAllTicketsByWorkspaceId(
 
     const where = {
       workspaceId,
+      ...(status && { status }),
+      ...(priority && { priority }),
       ...(role === 'CLIENT' && {
         createdBy: {
           id: member.data.id,

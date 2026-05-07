@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useTransition } from 'react';
 import { useDisclosure } from '@heroui/react';
 import { Button } from '@heroui/button';
@@ -17,6 +16,7 @@ import AssignTicketModal from './AssignTicketModal';
 import ConfirmationModal from '../ConfirmationModal';
 import { ColumnType } from './columns';
 import ReviewTicketModal from './ReviewTicketModal';
+import TicketFilters from './TicketFilters';
 
 type TicketTableProps = {
   tickets: TicketDto[];
@@ -36,6 +36,7 @@ export default function TicketsContainer({
   workspaceId,
 }: TicketTableProps) {
   const [ticketId, setTicketId] = useState<string>('');
+
   const [selectedTicket, setSelectedTicket] = useState<TicketDto | null>(null);
   const [isPending, startTransition] = useTransition();
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -148,16 +149,15 @@ export default function TicketsContainer({
         onOpenChange={onAssignModalChange}
         ticketId={ticketId}
       />
-      <div className="flex flex-col gap-4 p-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Button
-            hidden={!permissions.canCreate}
-            color="primary"
-            onPress={callCreateTicket}
-          >
-            Create
-          </Button>
-        </div>
+      <div className="flex justify-between items-center gap-4 p-4">
+        <TicketFilters />
+        <Button
+          hidden={!permissions.canCreate}
+          color="primary"
+          onPress={callCreateTicket}
+        >
+          Create
+        </Button>
       </div>
       <TicketsTable
         tickets={tickets}
